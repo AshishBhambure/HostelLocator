@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerHostelApiCaller, uploadHostelImages } from '../../services/apiCaller';
+import { registerHostelApiCaller, updateHostelDetailsApiCaller, uploadHostelImages } from '../../services/apiCaller';
 import { ArrowUpTrayIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { setStep } from '../../slices/stepSlice';
 import { setPictures } from '../../slices/hostelFormSlice';
 import { CheckCircleIcon, XCircleIcon } from 'react-native-heroicons/solid';
 import { getData } from '../../utils/getAndSetData';
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -27,6 +28,12 @@ const HostelPictures = () => {
   const dispatch = useDispatch();
   const { step } = useSelector(state => state.step);
   const { pictures } = useSelector(state => state.hostelForm);
+  const {update} = useSelector((state)=>state.hostelForm);
+  const {basicInfo,hostelInfo,locationInSlice,id} = useSelector((state)=>state.hostelForm);
+  const navigation = useNavigation();
+
+  console.log("Pictures from slice" ,pictures);
+
 
   const handleImageSelection = (setImageCallback, imageType, fromCamera = false) => {
     const options = {
@@ -63,7 +70,7 @@ const HostelPictures = () => {
     });
 
     const data = await uploadHostelImages(formData, setLoading);
-
+    console.log(data);
     if (data.success) {
       if (imageType === 'exteriorImage') {
         setExteriorImageUrl(data.image);
@@ -85,6 +92,7 @@ const HostelPictures = () => {
     }
   };
 
+  console.log("Pictures in Regitser" ,pictures)
   useEffect(() => {
     if (Object.keys(pictures).length !== 0) {
       setRoomImageUrl(pictures.roomImage);
@@ -94,7 +102,19 @@ const HostelPictures = () => {
   }, [pictures]);
 
   useEffect(()=>{
-    
+    if(update === false){
+      dispatch(setPictures({}));
+      setRoomImageUrl(null);
+      setBedImageUrl(null);
+      setExteriorImageUrl(null);
+
+    }
+  },[])
+   
+
+  console.log(" urls : " ,roomImageUrl , bedImageUrl,exteriorImageUrl);
+
+  useEffect(()=>{
 
     if (roomImageUrl || bedImageUrl || exteriorImageUrl) {
       dispatch(setPictures({
@@ -113,6 +133,7 @@ const HostelPictures = () => {
       alternateContactNumber: basicInfo.alternateContactNumber || '',
       hostelAddress: basicInfo.hostelAddress || '',
       landmark: basicInfo.landmark || '',
+      price:hostelInfo.price,
       roomType: hostelInfo.roomType,
       wifi: hostelInfo.wifi || false,
       hotWater: hostelInfo.hotWater || false,
@@ -130,10 +151,16 @@ const HostelPictures = () => {
     const data = await registerHostelApiCaller(formData, token);
 
     if (data.success) {
+      setRoomImageUrl(null);
+      setBedImageUrl(null);
+      setExteriorImageUrl(null);
       Toast.show({
         type: 'success',
         text1: 'Hostel registered successfully!',
       });
+
+      navigation.navigate('UpdateHostelDetails');
+
     } else {
       Toast.show({
         type: 'error',
@@ -141,6 +168,58 @@ const HostelPictures = () => {
       });
     }
   };
+
+  const updateHostelDetails = async()=>{
+    
+    console.log(" Fetchecd Id of hostel" ,id)
+
+    const formData = {
+      hostelName: basicInfo.hostelName || '',
+      ownersFullName: basicInfo.ownersFullName || '',
+      contactNumber: basicInfo.contactNumber || '',
+      alternateContactNumber: basicInfo.alternateContactNumber || '',
+      hostelAddress: basicInfo.hostelAddress || '',
+      landmark: basicInfo.landmark || '',
+      roomType: hostelInfo.roomType,
+      price:hostelInfo.price,
+      wifi: hostelInfo.wifi || false,
+      hotWater: hostelInfo.hotWater || false,
+      drinkingWater: hostelInfo.drinkingWater || true,
+      hostelType: hostelInfo.hostelType || '',
+      instructions: hostelInfo.instructions || '',
+      exteriorImage: pictures.exteriorImage || '',
+      roomImage: pictures.roomImage || '',
+      bedImage: pictures.bedImage || '',
+      latitude: locationInSlice.latitude,
+      longitude: locationInSlice.longitude,
+      id:id,
+    };
+
+
+    console.log("Data  of Update Form " , formData);
+
+   const data = await updateHostelDetailsApiCaller(formData);
+    console.log("Data in caller",data.success)
+   console.log(data);
+   if (data.success) {
+       setRoomImageUrl(null);
+       setBedImageUrl(null);
+       setExteriorImageUrl(null);
+    Toast.show({
+      type: 'success',
+      text1: 'Hostel details updated successfully!',
+    });
+
+    navigation.navigate('UpdateHostelDetails');
+
+  } else {
+    Toast.show({
+      type: 'error',
+      text1: 'Error in  updating  hostel details ',
+    });
+  }
+
+  }
 
   return (
     <ScrollView>
@@ -154,7 +233,7 @@ const HostelPictures = () => {
           >
             <Text className='text-black'>Select from Gallery</Text>
           </TouchableOpacity>
-          {exteriorImageUrl && (
+          { exteriorImageUrl && (
             <Text
               className='text-blue-900 underline'
               onPress={() => {
@@ -225,7 +304,7 @@ const HostelPictures = () => {
       </View>
 
       {/* Bed Image Section */}
-      <View className='border-b border-gray-500 pb-10 mx-2'>
+      <View className='pb-10 mx-2'>
         <Text className='text-black font-semibold text-center py-2'>Bed Image</Text>
         <View className='flex-row justify-between items-center'>
           <TouchableOpacity
@@ -262,6 +341,51 @@ const HostelPictures = () => {
             {loading && <ActivityIndicator color="white" />}
           </TouchableOpacity>
         )}
+
+        <View>
+
+          <TouchableOpacity
+           className=' bg-blue-500 py-2 px-3 rounded-md self-start  mt-8'
+           onPress={()=>dispatch(setStep(3))}
+          >
+            <Text
+             
+            >Back</Text>
+          </TouchableOpacity>
+          {
+           update &&  Object.keys(pictures).length === 3 && (
+              <TouchableOpacity
+              className=' py-2  px-1 rounded-md  bg-blue-600 flex items-center justify-center mt-28  '
+               onPress={()=> updateHostelDetails()}
+              >
+                <Text
+                 className=' text-white font-semibold  '
+                > Update Details </Text>
+              </TouchableOpacity>
+
+
+
+            )
+          }
+
+
+         {
+           !update &&  Object.keys(pictures).length === 3 && (
+              <TouchableOpacity
+              className=' py-2  px-1 rounded-md  bg-blue-600 flex items-center justify-center mt-28  '
+               onPress={()=> registerHostel()}
+              >
+                <Text
+                 className=' text-white font-semibold  '
+                > Register</Text>
+              </TouchableOpacity>
+
+
+
+            )
+          }
+
+        </View>
       </View>
 
       {/* Modal for image preview */}

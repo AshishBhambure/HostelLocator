@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiConnector } from "./apiConnector"
-import { storeData } from "../utils/getAndSetData";
+import { clearAsyncStorage, storeData } from "../utils/getAndSetData";
 const BASE_URL = 'http://192.168.8.173:3000';
 
 export const test = async()=>{
@@ -58,14 +58,17 @@ export const login = async(data,showToastWithGravityAndOffset,storeData,navigati
     const LOGIN_API = BASE_URL + '/login';
     try{
        const result = await apiConnector('POST',LOGIN_API,data);
-
+      console.log('result of login ', result);
        if(result.data.success){
         showToastWithGravityAndOffset();
-        storeData('token',result.data.token);
-        storeData('user',result.data.user);
+        await clearAsyncStorage();
+        await storeData('token',result.data.token);
+        await storeData('user',result.data.user);
         navigation.navigate('Drawer');
         console.log("Login Done !!");
         console.log("Data of Login " ,result.data);
+
+        return result.data;
 
        }
 
@@ -120,7 +123,7 @@ export const uploadImage = async (formData) => {
 }
 
 export const uploadHostelImages = async(formData,setLoading)=>{
-
+    console.log("Images calling ");
   const API_URL = BASE_URL + '/uploadHostelImages';
 try{
   setLoading(true);
@@ -133,6 +136,7 @@ try{
   });
   
   const data = await response.json();
+  console.log("Data --> " ,data);
 
  
   console.log("Images -- >> " ,data);
@@ -154,7 +158,7 @@ export const registerHostelApiCaller = async(data,token)=>{
        const  result = await apiConnector('POST',API_URL,data,{
         Authorization: `Bearer ${token}`,
       });
-
+      
       console.log("Result of Register Hostel " ,  result);
      
       return result.data;
@@ -218,3 +222,90 @@ export const updateHostelOccupancyApiCaller = async (data) => {
     throw error;
   }
 };
+
+export const updateHostelDetailsApiCaller = async(formData) =>{
+
+  const API = BASE_URL +'/updateHostelDetails';
+   try{
+       const result = await apiConnector('POST',API,formData);
+       console.log("Data of APi " , result.data.success);
+       return result.data;
+   }
+   catch(e)
+   {
+    console.log("Error " ,e);
+   }
+}
+
+export const getAllHostelsApiCaller = async(setLoading)=>{
+        const API_URL = BASE_URL +'/getAllHostels';
+
+        console.log("Calling to ",API_URL );
+
+
+        try{
+          setLoading(true);
+          const result = await apiConnector('GET',API_URL);
+          // console.log("Result of an api ",result.data.data);
+          setLoading(false);
+          return result.data.data;
+        }
+        catch(e){
+          console.log("Error ",e);
+        }
+}
+
+export const searchHostelsApiCaller = async(setLoading,keyword,hostelType)=>{
+
+  const API_URL  = BASE_URL +`/searchHostels?keyword=${keyword}`;
+  if(hostelType){
+    //set it and get  add url 
+  }
+  try{ 
+    setLoading(true);
+   const result = await apiConnector('POST',API_URL);
+   return result.data;
+
+  }
+  catch(e){
+    console.log("Error " , e);
+  }
+  finally{
+    setLoading(false);
+  }
+}
+
+export const getProfileData = async(userId)=>{
+  try{
+    const url = BASE_URL+'/getProfileData';
+   const result = await apiConnector('POST',url,{userId});
+   console.log("Result is " , result.data);
+   return result.data.data;
+   
+  }
+  catch(e){
+    console.log("Error In ProfileData " ,e);
+  }
+}
+
+export const updateProfileApiCaller = async(formData)=>{
+  const api = BASE_URL + '/updateUserProfile';
+  try{
+    const response = await fetch(api, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    
+    const data = await response.json();
+    console.log("data" ,data);
+    return data;
+
+  }
+  catch(e){
+    console.log("Error while updating profile in FE" , e);
+  }
+}

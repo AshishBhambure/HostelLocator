@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Text, TextInput, View, StyleSheet, Button } from 'react-native';
 import axios from 'axios'; // Assuming you are using axios for API calls
 import { updateHostelOccupancyApiCaller } from '../services/apiCaller';
+import Toast from 'react-native-toast-message';
 
 const UpdateHostelOccupancy = () => {
   const route = useRoute();
@@ -37,13 +38,24 @@ const UpdateHostelOccupancy = () => {
     roomData.id=hostel._id;
 
     const res = await updateHostelOccupancyApiCaller(roomData);
+     if(res){
+      Toast.show({
+        text1:"Hostel occupancy updated !! "
+      })
+     }
+     else{
+      Toast.show({
+        text1:"Failed to update server error  !! "
+      }
+    )
+     }
 
     console.log(roomData)
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Update Hostel Occupancy Details</Text>
+      <Text style={styles.title}>{hostel.hostelName}</Text>
 
       {/* Table Headers */}
       <View style={styles.tableHeader}>

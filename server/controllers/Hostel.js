@@ -7,7 +7,7 @@ exports.registerHostel =  async(req,res)=>{
    try{
        const {hostelName, ownersFullName , contactNumber ,alternateContactNumber , 
          hostelAddress ,landmark ,roomType,wifi,hotWater,drinkingWater,
-         hostelType,instructions,exteriorImage,roomImage,bedImage,latitude,longitude} = req.body;
+         hostelType,instructions,exteriorImage,roomImage,bedImage,latitude,longitude,price} = req.body;
 
 
        if(!hostelName || !hostelAddress || !ownersFullName || ! contactNumber || !latitude || !longitude ){
@@ -37,7 +37,8 @@ exports.registerHostel =  async(req,res)=>{
         landmark,ownersFullName,contactNumber,alternateContactNumber,
         latitude,longitude,roomImage,bedImage , exteriorImage , 
         roomType,hostelType,
-        instructions, wifi , hotWater ,drinkingWater
+        instructions, wifi , hotWater ,drinkingWater,
+        price // set if provided
        });
 
 
@@ -62,16 +63,16 @@ exports.registerHostel =  async(req,res)=>{
 
 exports.uploadHostelImages =  async(req,res)=>{
   try{
-    
+    console.log("Requets recived");
     const image = req.files.image;
-
+   
 
     console.log(image);
 
 
     // console.log("Images Recived Are As Follows" , roomImage, bedImage ,exteriorImage );
 
-   
+    
 
     const result = await  uploadImageToCloudinary(image,'HostelLocator');
     // const bedImageResult = await  uploadImageToCloudinary(bedImage,'HostelLocator');
@@ -168,8 +169,10 @@ exports.getHostelDetails =async (req,res)=>{
 exports.updateHostelOccupancy = async (req, res) => {
   try {
     const hostelId = req.body.id; // Assuming the hostel ID is passed as a URL parameter
-    console.log(hostelId)
+    console.log(hostelId);
+
     const updatedData = req.body; // Fetch all updated data from the request body
+  console.log("Price " ,updatedData.price);
 
     // Update the hostel occupancy details by finding the hostel with the given ID and updating its fields
     const updatedHostel = await Hostel.findByIdAndUpdate(
@@ -198,6 +201,7 @@ exports.updateHostelOccupancy = async (req, res) => {
           ThreeBeds: updatedData.ThreeBeds,
           FourBeds: updatedData.FourBeds,
           MoreThanFourBeds: updatedData.MoreThanFourBeds,
+          price:updatedData.price,
         },
       },
       { new: true } // Returns the updated document
@@ -219,3 +223,118 @@ exports.updateHostelOccupancy = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+exports.updtaeHostelDetails = async(req,res)=>{
+  try{
+    const hostelId = req.body.id; 
+    console.log(hostelId)
+    const updatedData = req.body; 
+    const hostel = await Hostel.findById(hostelId);
+   if(!hostel){
+    return res.status(404).json({
+      success:false,
+      message:"Hostel Not Found"
+    });}
+
+    const updatedHostel = await Hostel.findByIdAndUpdate(
+      hostelId, 
+      {
+        $set: {
+          hostelName: updatedData.hostelName,
+          alternateContactNumber: updatedData.alternateContactNumber,
+          bedImage: updatedData.bedImage,
+          contactNumber: updatedData.contactNumber,
+          drinkingWater: updatedData.drinkingWater,
+          exteriorImage: updatedData.exteriorImage,
+          hostelAddress: updatedData.hostelAddress,
+          hostelType: updatedData.hostelType,
+          hotWater: updatedData.hotWater,
+          instructions: updatedData.instructions,
+          landmark: updatedData.landmark,
+          latitude: updatedData.latitude,
+          longitude: updatedData.longitude,
+          ownersFullName: updatedData.ownersFullName,
+          roomImage: updatedData.roomImage,
+          roomType: updatedData.roomType,
+          wifi: updatedData.wifi,
+          SingleBed: updatedData.SingleBed,
+          DoubleBeds: updatedData.DoubleBeds,
+          ThreeBeds: updatedData.ThreeBeds,
+          FourBeds: updatedData.FourBeds,
+          MoreThanFourBeds: updatedData.MoreThanFourBeds,
+          price:updatedData?.price
+        },
+      },
+      { new: true } // Returns the updated document
+    );
+
+    // Check if the hostel was found and updated
+    if (!updatedHostel) {
+      return res.status(404).json({ message: 'Hostel not found' });
+    }
+
+    // Return success response with updated hostel details
+    res.status(200).json({
+      message: 'Hostel details updated successfully',
+      data:updatedHostel,
+      success:true,
+    });
+
+  }
+  catch(e){
+    console.log("Error While Updating the Hostel Details " ,e);
+    return res.status(500).json({
+      success:false,
+      message:"Error While updateing hostel Details "
+    });
+
+  }
+}
+exports.getAllHostels = async(req,res)=>{
+try{
+   const result = await Hostel.find().populate('hostelOwner');
+
+   return res.status(200).json({
+    success:true,
+    messgae:"All Hostels Fetched SuccessFully",
+    data:result,
+   });
+   
+}
+catch(e){
+  console.log("Error while Fetching all hostels ",e);
+  return re.status(500).json({
+    success:false,
+    messgae:"Error ",
+    data:e.message,
+
+  })
+}
+}
+
+exports.searchHostels = async (req,res)=>{
+  try {
+    const { keyword,hostelType } = req.query;
+
+    // Build the query
+    let query = {};
+    
+    // Search by keyword in hostelName, ownersFullName, or hostelAddress
+    if (keyword) {
+      query.$or = [
+        { hostelName: { $regex: keyword, $options: 'i' } },
+        { ownersFullName: { $regex: keyword, $options: 'i' } },
+        { hostelAddress: { $regex: keyword, $options: 'i' } }
+      ];
+    }
+
+    // Filter by amenities
+    if (hostelType) query.hostelType = hostelType;
+    const hostels = await Hostel.find(query).populate('hostelOwner');
+    res.json(hostels);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to search hostels' });
+  }
+}

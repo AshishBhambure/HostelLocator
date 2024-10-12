@@ -46,6 +46,7 @@ const BasicInformation = () => {
     <ScrollView
       className="mx-2 bg-white flex-col gap-y-2 my-4 py-2 px-3"
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={{paddingBottom:40}}
     >
       <View>
         <Text className="text-center text-xl font-semibold my-2 text-black">
@@ -54,6 +55,9 @@ const BasicInformation = () => {
       </View>
 
       {/* Hostel Name Input */}
+      <Text
+       className=' text-black '
+      > Hostel Name <Text className=' text-red-900'>* </Text> </Text>
       <TextInput
         {...register('hostelName', {
           required: 'Hostel Name is Required',
@@ -69,6 +73,9 @@ const BasicInformation = () => {
       )}
 
       {/* Owner's Full Name Input */}
+      <Text
+       className=' text-black '
+      > Owner's Full Name <Text className=' text-red-900'>* </Text>  </Text>
       <TextInput
         {...register('ownersFullName', {
           required: "Owner's Full Name is Required",
@@ -84,26 +91,39 @@ const BasicInformation = () => {
       )}
 
       {/* Contact Number Input */}
-      <TextInput
-        {...register('contactNumber', {
-          required: 'Contact Number is Required',
-        })}
-        placeholder="Contact Number"
-        keyboardType="numeric"
-        placeholderTextColor="gray"
-        className="bg-[#F1F4FF] my-2 text-black pl-2 border border-blue-800 rounded-md"
-        value={formValues.contactNumber || ''} // Link to react-hook-form value
-        onChangeText={(text) => setValue('contactNumber', text)} // Update form state
-      />
-      {errors.contactNumber && (
-        <Text style={{ color: 'red' }}>{errors.contactNumber.message}</Text>
-      )}
+      <Text className=' text-black '>
+  Contact Number <Text className=' text-red-900'>* </Text>
+</Text>
+
+<TextInput
+  {...register('contactNumber', {
+    required: 'Contact Number is required',
+    pattern: {
+      value: /^[0-9]{10}$/, // Regex for exactly 10 digits
+      message: 'Phone number must be exactly 10 digits',
+    },
+  })}
+  placeholder="Contact Number"
+  keyboardType="numeric"
+  placeholderTextColor="gray"
+  className="bg-[#F1F4FF] my-2 text-black pl-2 border border-blue-800 rounded-md"
+  value={formValues.contactNumber || ''} // Link to react-hook-form value
+  onChangeText={(text) => setValue('contactNumber', text)} // Update form state
+/>
+{errors.contactNumber && (
+  <Text style={{ color: 'red' }}>{errors.contactNumber.message}</Text>
+)}
+
 
       {/* Alternate Contact Number Input */}
+      <Text
+       className=' text-black '
+      > Alternate Contact Number </Text>
       <TextInput
         {...register('alternateContactNumber')}
         placeholder="Alternate Contact Number (Not mandatory)"
         keyboardType="numeric"
+        
         placeholderTextColor="gray"
         className="bg-[#F1F4FF] my-2 text-black pl-2 border border-blue-800 rounded-md"
         value={formValues.alternateContactNumber || ''} // Link to react-hook-form value
@@ -111,6 +131,10 @@ const BasicInformation = () => {
       />
 
       {/* Hostel Address Input */}
+      <Text
+       className=' text-black '
+      > Hostel Address <Text className=' text-red-900'>* </Text>  </Text>
+
       <TextInput
         {...register('hostelAddress', {
           required: 'Hostel Address is Required',
@@ -126,6 +150,10 @@ const BasicInformation = () => {
       )}
 
       {/* Landmark Input */}
+      <Text
+       className=' text-black '
+      > Landmark </Text>
+
       <TextInput
         {...register('landmark', {
           required: 'Landmark is Required',

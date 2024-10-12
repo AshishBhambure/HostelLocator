@@ -8,17 +8,23 @@ import GetHostelLocation from '../components/HostelRegistration/GetHostelLocatio
 import HostelPictures from '../components/HostelRegistration/HostelPictures';
 import { useDispatch, useSelector } from 'react-redux';
 import { setStep } from '../slices/stepSlice';
+import { setPictures } from '../slices/hostelFormSlice';
 
 const RegisterHostel = () => {
     // const [step,set/Step] = useState(4);
 
    const {step} = useSelector((state)=>state.step);
+   const {update} = useSelector((state)=>state.hostelForm);
    const dispatch = useDispatch();
   
-   dispatch(setStep(4));
+  //  dispatch(setStep(4));
 
   useEffect(()=>{
     dispatch(setStep(1));
+    if(!update){
+      dispatch(setPictures({}));
+      
+    }
   },[]);
 
 

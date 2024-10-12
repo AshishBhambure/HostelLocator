@@ -1,10 +1,10 @@
 import React, { Component, useEffect, useState } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native'
 import { getAllHostels, getHostelDetials } from '../services/apiCaller';
 import { getData } from '../utils/getAndSetData';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
-import { setBasicInfo, setHostelInfo, setLocationInSlice, setPictures, setUpdate } from '../slices/hostelFormSlice';
+import { setBasicInfo, setHostelInfo, setId, setLocationInSlice, setPictures, setUpdate } from '../slices/hostelFormSlice';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const UpdateHostelDetails = ()=>{
@@ -45,7 +45,10 @@ const UpdateHostelDetails = ()=>{
          console.log("Data  in caller  of Hostel ",hostelData);
 
          if(hostelData){
+            dispatch(setId(id));
+             console.log("Setting the hostel id ",id);
             dispatch(setBasicInfo({
+               
                 hostelName: hostelData.hostelName,
                 ownersFullName: hostelData.ownersFullName,
                 contactNumber: hostelData.contactNumber,
@@ -61,6 +64,7 @@ const UpdateHostelDetails = ()=>{
             hotWater: hostelData.hotWater,
             drinkingWater: hostelData.drinkingWater,
             instructions: hostelData.instructions,
+            price:hostelData?.price
           }));
 
           dispatch(setLocationInSlice({
@@ -80,7 +84,20 @@ const UpdateHostelDetails = ()=>{
 
 
     }
+  if(!data){
+    return (
+      <View
+       className=' h-screen w-screen flex-col items-center justify-center'      
+      >
 
+    
+      <ActivityIndicator
+       size={24}
+       color={'blue'}
+      ></ActivityIndicator>
+        </View>
+    )
+  }
     return(
         <ScrollView
          className=''

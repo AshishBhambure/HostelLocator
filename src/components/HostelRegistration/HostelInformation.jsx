@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useForm } from 'react-hook-form';
-import DropDown from './DropDown';
 import CheckBox from '@react-native-community/checkbox';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { ChevronLeftIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
@@ -17,6 +16,12 @@ const HostelInformation = () => {
   const [drinkingWater, setDrinkingWater] = useState(null);
   const [hostelType, setHostelType] = useState();
   const [instructions, setInstructions] = useState();
+  const [price, setPrice] = useState({
+    from: 0,
+    to: 0,
+  });
+
+  console.log(price);
 
   // Room types options
   const roomOptions = [
@@ -55,7 +60,7 @@ const HostelInformation = () => {
   };
 
   const dispatch = useDispatch();
-  
+
   const onSubmit = (data) => {
     console.log('Data of Hostel Information', {
       roomType,
@@ -63,7 +68,8 @@ const HostelInformation = () => {
       hotWater,
       drinkingWater,
       hostelType,
-      instructions
+      instructions,
+      price,  // Include price in the submission
     });
     dispatch(setStep(3));
     dispatch(setHostelInfo({
@@ -72,7 +78,8 @@ const HostelInformation = () => {
       hotWater,
       drinkingWater,
       hostelType,
-      instructions
+      instructions,
+      price,  // Include price in the Redux state
     }));
   };
 
@@ -94,8 +101,9 @@ const HostelInformation = () => {
   };
 
   const { hostelInfo } = useSelector((state) => state.hostelForm);
-  
+
   useEffect(() => {
+     console.log("HI " ,hostelInfo);
     if (Object.keys(hostelInfo).length !== 0) {
       setRoomType(hostelInfo.roomType || []);
       setWifi(hostelInfo.wifi);
@@ -103,10 +111,12 @@ const HostelInformation = () => {
       setDrinkingWater(hostelInfo.drinkingWater);
       setHostelType(hostelInfo.hostelType);
       setInstructions(hostelInfo.instructions || '');
+      setPrice(hostelInfo.price || { from: 0, to: 0 });
       const selectedHostelType = HostelType.find(item => item.value === hostelInfo.hostelType);
       if (selectedHostelType) {
         setSelectedId(selectedHostelType.id);
       }
+      
     }
   }, [hostelInfo]);
 
@@ -123,7 +133,7 @@ const HostelInformation = () => {
       </View>
 
       {/* Hostel Type Dropdown */}
-      <Text className="text-black py-1 font-semibold">Hostel Type</Text>
+      <Text className="text-black py-1 font-semibold">Hostel Type <Text className=' text-red-900'>* </Text> </Text>
       <RadioGroup 
         containerStyle={{ flexDirection: 'row' }}
         labelStyle={{ color: 'black' }}
@@ -134,7 +144,7 @@ const HostelInformation = () => {
 
       {/* Room Type Checkboxes */}
       <View>
-        <Text className="text-black py-1 font-semibold">Room Types</Text>
+        <Text className="text-black py-1 font-semibold">Room Types <Text className=' text-red-900'>* </Text> </Text>
         <View className="flex-row flex-wrap gap-x-2">
           {roomOptions.map((room, index) => (
             <View key={index} className="flex flex-row items-center">
@@ -151,7 +161,7 @@ const HostelInformation = () => {
 
       {/* Wifi Availability */}
       <View>
-        <Text className="text-black font-semibold">Is Wi-Fi available?</Text>
+        <Text className="text-black font-semibold">Is Wi-Fi available? <Text className=' text-red-900'>* </Text> </Text>
         <RadioGroup 
           labelStyle={{ color: 'black' }}
           containerStyle={{ flexDirection: 'row' }}
@@ -166,7 +176,7 @@ const HostelInformation = () => {
 
       {/* Hot Water Availability */}
       <View>
-        <Text className="text-black font-semibold">Is hot water available for bathing?</Text>
+        <Text className="text-black font-semibold">Is hot water available for bathing? <Text className=' text-red-900'>* </Text> </Text>
         <RadioGroup 
           labelStyle={{ color: 'black' }}
           containerStyle={{ flexDirection: 'row' }}
@@ -181,7 +191,7 @@ const HostelInformation = () => {
 
       {/* Purified Drinking Water */}
       <View>
-        <Text className="text-black font-semibold">Is purified drinking water available?</Text>
+        <Text className="text-black font-semibold">Is purified drinking water available? <Text className=' text-red-900'>* </Text> </Text>
         <RadioGroup 
           containerStyle={{ flexDirection: 'row' }}
           labelStyle={{ color: 'black' }}
@@ -194,39 +204,66 @@ const HostelInformation = () => {
         />
       </View>
 
-      <TextInput
-        value={instructions}
-        onChangeText={(text) => setInstructions(text)}
-        className='border rounded-md border-blue-400 bg-blue-50 text-gray-600 align-text-top'
-        placeholder='Add Your Instructions/ Rules of Hostel Here'
-        placeholderTextColor={'gray'}
-        multiline={true}
-        numberOfLines={10}
-      />
+      {/* Price Range */}
+      <View>
+        <Text className='text-black font-semibold'>Price Range of Hostel (in Rs )</Text>
+        <View className='flex-row items-center justify-between px-2 my-2'>
+          <TextInput
+            placeholder='Price from'
+            placeholderTextColor={'gray'}
+            className='border w-[50%]  px-4 rounded-full text-black border-blue-500 bg-blue-50'
+            keyboardType={'number-pad'}
+            value={price.from.toString()}
+            onChangeText={(value) => setPrice((prevPrice) => ({ ...prevPrice, from: parseInt(value, 10) || 0 }))}
+          />
+          <Text>to</Text>
+          <TextInput
+            placeholder='Price to'
+            placeholderTextColor={'gray'}
+            className='border px-4  w-[50%] rounded-full text-black border-blue-500 bg-blue-50'
+            keyboardType={'number-pad'}
+            value={price.to.toString()}
+            onChangeText={(value) => setPrice((prevPrice) => ({ ...prevPrice, to: parseInt(value, 10) || 0 }))}
+          />
+        </View>
+      </View>
 
-      {/* Submit Button */}
-      <View className='flex-row justify-between py-2 gap-x-2'>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(setStep(1));
-          }}
-          className="bg-blue-700 py-2 self-center px-1 border border-black rounded-lg flex-1 flex-row justify-center items-center"
-        >
-          <ChevronLeftIcon color={'white'} size={16} strokeWidth={4} />
-          <Text className="text-white self-center font-semibold text-lg">
-            Back
-          </Text>
-        </TouchableOpacity>
+      {/* Instructions */}
+      <View>
+        <Text className='text-black font-semibold'>Additional Instructions for Room</Text>
+        <TextInput
+          placeholder='E.g. No smoking inside, Pets not allowed'
+          placeholderTextColor={'gray'}
+          className='bg-blue-50 text-black  px-2 py-1 w-full border border-blue-500 rounded-md'
+          multiline={true}
+          numberOfLines={5}
+          textAlignVertical='top'
+          value={instructions}
+          onChangeText={setInstructions}
+        />
+      </View>
 
+      {/* Navigation Buttons */}
+      <View className="w-full flex-row items-center justify-between gap-x-4">
         <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          className="bg-blue-700 py-2 self-center px-1 border border-black rounded-lg flex-1 flex-row justify-center items-center"
+          className="flex-row  items-center justify-center border border-blue-600 rounded-full px-4 py-2"
+          onPress={() => dispatch(setStep(1))}
         >
-          <Text className="text-white self-center font-semibold text-lg">
-            Next
-          </Text>
-          <ChevronRightIcon color={'white'} size={16} strokeWidth={4} />
+          <ChevronLeftIcon color={'#4970bf'} size={22} />
+          <Text className="text-base font-semibold text-[#4970bf]">Back</Text>
         </TouchableOpacity>
+  {
+     wifi !== null && hotWater !== null && hostelType !== null && drinkingWater !== null &&  (
+      <TouchableOpacity
+      className="flex-row items-center justify-center border border-blue-600 bg-blue-600 rounded-full px-4 py-2"
+      onPress={handleSubmit(onSubmit)}
+    >
+      <Text className="text-base font-semibold text-white">Next</Text>
+      <ChevronRightIcon color={'white'} size={22} />
+    </TouchableOpacity>
+     )
+  }
+        
       </View>
     </ScrollView>
   );

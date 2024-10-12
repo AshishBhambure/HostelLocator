@@ -4,8 +4,11 @@ import { useForm } from 'react-hook-form';
 import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '../services/apiCaller';
+import Toast from 'react-native-toast-message';
+import { getData } from '../utils/getAndSetData';
 
 const Login = () => {
+
     const showToastWithGravityAndOffset = () => {
         ToastAndroid.showWithGravityAndOffset(
           'Login  successfull !! ',
@@ -20,11 +23,16 @@ const Login = () => {
         register,handleSubmit,setValue,getValues,formState:{errors}
     } = useForm();
 
-    const onSubmit = (data)=>{
+    const onSubmit = async(data)=>{
         console.log("Login Form Data ", data );
-        const result = login(data,showToastWithGravityAndOffset,storeData,navigation);
-         
-        console.log("Data is :: ",result);
+        const result = await login(data,showToastWithGravityAndOffset,storeData,navigation);
+          if(result){
+            Toast.show({
+                text1:"Login successfull"
+            })
+            navigation.navigate('Home');
+          }
+        // console.log("Data is :: ",result);
 
     }
 
@@ -39,17 +47,22 @@ const Login = () => {
       };
 
 
-      const getData = async (key) => {
-        try {
-            const jsonValue = await AsyncStorage.getItem(key);
-            return jsonValue != null ? JSON.parse(jsonValue) : null; // Parse the JSON string back to an object
-          } catch (e) {
-            console.log('Error retrieving data:', e);
-          }
-      };
+    //   const getData = async (key) => {
+    //     try {
+    //         const jsonValue = await AsyncStorage.getItem(key);
+    //         return jsonValue != null ? JSON.parse(jsonValue) : null; // Parse the JSON string back to an object
+    //       } catch (e) {
+    //         console.log('Error retrieving data:', e);
+    //       }
+    //   };
+    // const f = async()=>{
+    //     console.log('getData Called -- >> ');
+    //     const data = await getData('user');
+    //     console.log(data);
+    // }
+    // f();
 
-
-
+        
 
     return (
         <KeyboardAvoidingView

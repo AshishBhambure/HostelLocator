@@ -12,7 +12,7 @@ import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import VerifyOtp from './screens/VerifyOtp';
 import DrawerContent from './DrawerContent';
-import { clearAsyncStorage } from './utils/getAndSetData';
+import { clearAsyncStorage, getData } from './utils/getAndSetData';
 import { Bars3BottomLeftIcon } from 'react-native-heroicons/solid';
 import Profile from './screens/Profile';
 import GetGeoLocation from './components/GetGeoLocation';
@@ -21,6 +21,9 @@ import { Provider, useSelector } from 'react-redux'
 import store from './store';
 import UpdateHostelDetails from './screens/UpdateHostelDetails';
 import UpdateHostelOccupancy from './screens/UpdateHostelOccupancy';
+import HostelScreen from './screens/HostelScreen';
+import Map from './screens/Map';
+import SearchScreen from './screens/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,10 +32,49 @@ const Drawer = createDrawerNavigator();
 
 const StackNav = () => {
   const {update} = useSelector((state)=>state.hostelForm);
+  const [user, setUser] = useState(null);
+  // const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await getData('user');
+      // console.log("Result -- >", res);
+      setUser(res);
+
+      
+
+
+
+    };
+    fetchUser();
+  }, []);
+   let initialRouteName;
+
+  //  useEffect(()=>{
+  //   console.log("User in AppStack -->",user);
+  //     if(user && user?.accountType === 'Student'){
+  //       initialRouteName='Home'
+  //     }
+  //     else{
+  //       initialRouteName='UpdateHostelDetails'
+  //     }
+
+  //  },[user])
+
+   useEffect(() => {
+    const fetchUser = async () => {
+      const res = await AsyncStorage.getItem('user');
+      setUser(res ? JSON.parse(res) : null);
+    };
+    fetchUser();
+  }, []);
+
+
+    
+   
   return (
     <Stack.Navigator
-       initialRouteName='Profile'
-       screenOptions={{
+    initialRouteName={'Home'}
+    screenOptions={{
         statusBarColor: '#0163d2',
         headerStyle: { backgroundColor: '#0163d2' },
         headerTintColor: '#fff',
@@ -59,31 +101,12 @@ const StackNav = () => {
         })}
       />
 
-
-        <Stack.Screen
-        name="GetLocation"
-        component={GetGeoLocation}
-        options={({ navigation }) => ({
-           headerLeft: () => (
-            <TouchableOpacity 
-              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            >
-              <Bars3BottomLeftIcon
-              size={30}
-              color="#fff"
-              
-            />
-            </TouchableOpacity>
-            
-          ),
-        })}
-      />
-
      
      <Stack.Screen
         name="Home"
         component={Home}
         options={({ navigation }) => ({
+          headerShown:false,
           headerLeft: () => (
             <TouchableOpacity 
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -123,7 +146,7 @@ const StackNav = () => {
         name="UpdateHostelDetails"
         component={UpdateHostelDetails}
         options={({ navigation }) => ({
-          title:"Update Hostel Details",
+           title:"Update Hostel Details ",
           headerLeft: () => (
             <TouchableOpacity 
               onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -158,6 +181,43 @@ const StackNav = () => {
           ),
         })}
       />
+
+        <Stack.Screen
+        name="HostelScreen"
+        component={HostelScreen}
+        options={{headerShown:false}}   
+      />
+
+
+       <Stack.Screen
+        name="MapScreen"
+        component={Map}
+        options={({ navigation }) => ({
+          headerShown:false,
+          headerLeft: () => (
+            <TouchableOpacity 
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+            >
+              <Bars3BottomLeftIcon
+              size={30}
+              color="#fff"
+              
+            />
+            </TouchableOpacity>
+            
+          ),
+        })}
+      />
+
+
+       <Stack.Screen
+        name="SearchScreen"
+        component={SearchScreen}
+        options={{headerShown:false}}
+        
+      />
+
+
 
 
 

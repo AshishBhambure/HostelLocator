@@ -7,6 +7,7 @@ const initialState = {
   pictures: {},
   locationInSlice: {}, // Add location field
   update:false,
+  hostelId:null,
 };
 
 const formSlice = createSlice({
@@ -36,9 +37,12 @@ const formSlice = createSlice({
       state.hostelInfo = {};
       state.pictures = {};
       state.location = {}; // Reset location
+    },
+    setId:(state,action)=>{
+       state.id = action.payload; 
     }
   },
 });
 
-export const { setBasicInfo, setHostelInfo, setPictures, setLocationInSlice, resetForm ,setUpdate } = formSlice.actions;
+export const { setBasicInfo, setHostelInfo, setId, setPictures, setLocationInSlice, resetForm ,setUpdate } = formSlice.actions;
 export default formSlice.reducer;

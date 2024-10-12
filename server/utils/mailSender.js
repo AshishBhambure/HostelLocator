@@ -18,7 +18,7 @@ try{
             to:email ,
             subject:title ,
             html:`
-            <img src="https://i.ibb.co/7Xyj3PC/logo.png"></img>
+            <h1> Otp for Verification </h1>
             <h2>  ${body} </h2>
             ` ,
             

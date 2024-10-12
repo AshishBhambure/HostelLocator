@@ -1,3 +1,4 @@
+const { toFormData } = require('axios');
 const mongoose = require('mongoose');
 const hostelSchema = new mongoose.Schema({
   hostelName: {
@@ -10,6 +11,7 @@ const hostelSchema = new mongoose.Schema({
     required:true,
     ref:"User",
    },
+  
   ownersFullName: {
     type: String,
     required: true,
@@ -53,7 +55,6 @@ const hostelSchema = new mongoose.Schema({
   hostelType: {
     type: String,
     enum: ['Boys', 'Girls', 'Both'],
-    required: true
   },
   instructions: {
     type: String,
@@ -129,6 +130,16 @@ const hostelSchema = new mongoose.Schema({
       default: 0
     }
   },
+  price:{
+    from: {
+      type: Number,
+      default: 0
+    },
+    to:{
+      type: Number,
+      default: 0
+    },
+  }
 
 });
 
