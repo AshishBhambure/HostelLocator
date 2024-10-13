@@ -84,7 +84,7 @@ exports.uploadHostelImages =  async(req,res)=>{
     return res.status(200).json({
       success:true,
       message:"Images Uploaded  SuccessFully ! ",
-      image:result.url,
+      image:result.secure_url,
     });
 
 

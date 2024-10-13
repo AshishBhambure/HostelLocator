@@ -47,7 +47,7 @@ exports.updateProfile = async (req, res) => {
     console.log("image",image)
     if(image){
       const response = await uploadImageToCloudinary(image,'HostelLocator');
-      user.image = response.url;
+      user.image = response.secure_url;
     }
 
     const profile = await Profile.findById(user.additionalDetails);

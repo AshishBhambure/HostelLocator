@@ -1,7 +1,7 @@
 import axios from "axios";
 import { apiConnector } from "./apiConnector"
 import { clearAsyncStorage, storeData } from "../utils/getAndSetData";
-const BASE_URL = 'http://192.168.8.173:3000';
+const BASE_URL = 'https://hostellocator.onrender.com';
 
 export const test = async()=>{
     try{
