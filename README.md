@@ -1,102 +1,101 @@
-# 🏨 HostelLocator - React Native App
+# HostelLocator - React Native Mobile Application
 
-Welcome to **HostelLocator**, a modern and intuitive mobile app built with **React Native**, designed to bridge the gap between **Hostel Owners** and **Students or Travelers**. Whether you’re looking for a hostel or listing one, HostelLocator simplifies the entire process with an easy-to-use interface.
-
----
-
-## ✨ Features
-
-### 🔒 For Hostel Seekers (Users):
-- 🔍 **Filter & Search** nearby hostels by amenities, price, or location.
-- 🧭 **Drawer Navigation** for quick access to all screens.
-- 🏠 **View Hostel Details** with image galleries and occupancy info.
-- 🔄 **Login/Signup** for personalized recommendations and saved searches.
-
-### 🏠 For Hostel Owners:
-- 📝 **Multi-step Form** to register your hostel with complete details.
-- 📤 **Update Hostel Details** like name, location, price, and features.
-- 👥 **Update Occupancy Info** live to show current availability.
-- 🖼️ **Upload Hostel Images** to attract users.
-- 🔐 **Log Out Modal** for secure session management.
+**HostelLocator** is a full-featured React Native mobile application that provides a platform where hostel owners can list their hostels and users can browse, filter, and find hostels that suit their preferences. The application is built to serve both hostel owners and hostel seekers with dedicated interfaces and functionality.
 
 ---
 
-## 📱 App Preview
+## Features
 
-### 🔍 Filter Screen
-![Filter Screen](./appImages/FilterScreen.jpeg)
+### For Hostel Seekers (Users)
+- Search and filter hostels based on various parameters
+- Drawer-based navigation system
+- View hostel details, including images and availability
+- Secure login and signup functionality
 
-### 🧭 Drawer Navigation
-![Drawer](./appImages/Drawer.jpeg)
-
-### 📋 Login & Signup
-| Login | Signup |
-|---|---|
-| ![Login Screen](./appImages/LoginScreen.jpeg) | ![SignUp Screen](./appImages/SignUpScrenn.jpeg) |
-
----
-
-### 🔐 LogOut Confirmation
-![LogOut Modal](./appImages/LogOutModal.jpeg)
+### For Hostel Owners
+- Multi-step form to register hostel properties
+- Update hostel details and occupancy
+- Upload and manage hostel images
+- Secure logout and session management
 
 ---
 
-## 🏘️ Hostel Owner Panel
+## Application Screens
 
-### 📥 Step-by-Step Hostel Registration
+### Filter and Navigation
+
+| Filter Screen | Drawer Navigation |
+|---------------|------------------|
+| ![Filter Screen](./appImages/FilterScreen.jpeg) | ![Drawer](./appImages/Drawer.jpeg) |
+
+---
+
+### Authentication Screens
+
+| Login | Sign Up |
+|-------|---------|
+| ![Login Screen](./appImages/LoginScreen.jpeg) | ![Sign Up](./appImages/SignUpScrenn.jpeg) |
+
+---
+
+### Hostel Owner - Registration Flow
+
 | Step 1 | Step 2 |
-|---|---|
+|--------|--------|
 | ![Step 1](./appImages/HostelOwnerForm-Step-1.jpeg) | ![Step 2](./appImages/HostelOwnerForm-Step-2.jpeg) |
 
 | Step 3 | Step 4 |
-|---|---|
+|--------|--------|
 | ![Step 3](./appImages/HostelOwnerForm-Step-3.jpeg) | ![Step 4](./appImages/HostelOwnerForm-Step-4.jpeg) |
 
-### 🖼️ Manage Hostel Gallery
-![Hostel Images Screen](./appImages/HostelsImagesScreen.jpeg)
+---
 
-### 🛠️ Update Hostel Details
-![Update Details](./appImages/UpdateHostelDetails.jpeg)
+### Hostel Management Screens
 
-### 👥 Update Occupancy
-![Occupancy](./appImages/UpdateHostelOccupancy.jpeg)
+| Hostel Images | Update Hostel Details |
+|----------------|------------------------|
+| ![Hostel Images](./appImages/HostelsImagesScreen.jpeg) | ![Update Details](./appImages/UpdateHostelDetails.jpeg) |
+
+| Update Occupancy | Log Out Modal |
+|------------------|---------------|
+| ![Occupancy](./appImages/UpdateHostelOccupancy.jpeg) | ![Logout](./appImages/LogOutModal.jpeg) |
 
 ---
 
-## 🔎 Additional Screens
+### User Profile and Search Screens
 
-### 👤 Profile Screen
-![Profile](./appImages/ProfileScreen.jpeg)
-
-### 🔍 Search Results
-![Search](./appImages/SearchScreen.jpeg)
+| Profile Screen | Search Screen |
+|----------------|----------------|
+| ![Profile](./appImages/ProfileScreen.jpeg) | ![Search](./appImages/SearchScreen.jpeg) |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- ⚛️ **React Native**
-- 🧾 **Redux (optional) / Context API**
-- 🧩 **React Navigation**
-- ☁️ **Node.js Backend (Express)**
-- 🗃️ **MongoDB for Storage**
+- React Native (Frontend)
+- React Navigation for screen routing
+- Node.js and Express (Backend APIs)
+- MongoDB (Database)
+- Axios or Fetch for API integration
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
+
+To set up the project locally, follow the steps below:
 
 ```bash
-# Clone the repo
+# Clone the repository
 git clone https://github.com/yourusername/hostellocator.git
 
-# Navigate to project directory
+# Navigate into the project directory
 cd hostellocator
 
 # Install dependencies
 npm install
 
-# Run on Android
+# Start the application (Android)
 npx react-native run-android
 
-# Run on iOS (if on macOS)
+# Start the application (iOS - macOS only)
 npx react-native run-ios
