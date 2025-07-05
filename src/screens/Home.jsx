@@ -32,7 +32,7 @@ export default function Home() {
      const handleApplyFilters = async () => {
       console.log("Filters Boolean --->> ", wifi, pWater, hWater, lowToHigh);
     
-      let filteredHostels = data.filter(hostel => {
+      let filteredHostels = data.filter(hostel => { // function for filter type of Hostels
         let matchesWifi= true;
         let matchesHWater=true;
         let matchesPWater=true;
