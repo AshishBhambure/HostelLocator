@@ -1,22 +1,23 @@
 # HostelLocator - React Native Mobile Application
 
-**HostelLocator** is a full-featured React Native mobile application that provides a platform where hostel owners can list their hostels and users can browse, filter, and find hostels that suit their preferences. The application is built to serve both hostel owners and hostel seekers with dedicated interfaces and functionality.
+**HostelLocator** is a mobile application built with **React Native** that connects hostel owners with users searching for accommodation. It provides distinct functionality for both hostel seekers and hostel owners, offering features like hostel listing, image uploads, live occupancy updates, and a seamless browsing experience for users.
 
 ---
 
 ## Features
 
 ### For Hostel Seekers (Users)
-- Search and filter hostels based on various parameters
-- Drawer-based navigation system
-- View hostel details, including images and availability
-- Secure login and signup functionality
+- Browse hostels listed by owners with photos and location data
+- Filter and search based on price, availability, and more
+- View hostel cards with detailed information
+- Get directions to hostels via Google Maps integration
+- Authentication system with login and signup options
 
 ### For Hostel Owners
-- Multi-step form to register hostel properties
-- Update hostel details and occupancy
-- Upload and manage hostel images
-- Secure logout and session management
+- Multi-step form to list hostels with images, location, and occupancy
+- Update hostel details and manage availability in real time
+- Upload hostel images for a better visual experience
+- Secure logout modal to end the session
 
 ---
 
@@ -34,7 +35,7 @@
 
 | Login | Sign Up |
 |-------|---------|
-| ![Login Screen](./appImages/LoginScreen.jpeg) | ![Sign Up](./appImages/SignUpScrenn.jpeg) |
+| ![Login Screen](./appImages/LoginScreen.jpeg) | ![SignUp Screen](./appImages/SignUpScrenn.jpeg) |
 
 ---
 
@@ -70,19 +71,32 @@
 
 ---
 
+### Hostel Viewing and Maps Integration
+
+| Inside Hostel View - Card 1 | Inside Hostel View - Card 2 |
+|-----------------------------|-----------------------------|
+| ![Card 1](./appImages/InsideHostelCard-1.jpeg) | ![Card 2](./appImages/InsideHostelCard-2.jpeg) |
+
+| In-App Hostel Location | Google Maps Navigation |
+|------------------------|------------------------|
+| ![In App Location](./appImages/InAppHostelLocation.jpeg) | ![Google Maps](./appImages/HostelGetDirectionsGoogleMaps.jpeg) |
+
+---
+
 ## Tech Stack
 
 - React Native (Frontend)
-- React Navigation for screen routing
-- Node.js and Express (Backend APIs)
+- React Navigation for routing
+- Node.js and Express (Backend API)
 - MongoDB (Database)
 - Axios or Fetch for API integration
+- Google Maps API for directions
 
 ---
 
 ## Getting Started
 
-To set up the project locally, follow the steps below:
+To set up and run this project locally:
 
 ```bash
 # Clone the repository
