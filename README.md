@@ -1,80 +1,102 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 🏨 HostelLocator - React Native App
 
-# Getting Started
+Welcome to **HostelLocator**, a modern and intuitive mobile app built with **React Native**, designed to bridge the gap between **Hostel Owners** and **Students or Travelers**. Whether you’re looking for a hostel or listing one, HostelLocator simplifies the entire process with an easy-to-use interface.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+---
 
-## Step 1: Start the Metro Server
+## ✨ Features
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### 🔒 For Hostel Seekers (Users):
+- 🔍 **Filter & Search** nearby hostels by amenities, price, or location.
+- 🧭 **Drawer Navigation** for quick access to all screens.
+- 🏠 **View Hostel Details** with image galleries and occupancy info.
+- 🔄 **Login/Signup** for personalized recommendations and saved searches.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+### 🏠 For Hostel Owners:
+- 📝 **Multi-step Form** to register your hostel with complete details.
+- 📤 **Update Hostel Details** like name, location, price, and features.
+- 👥 **Update Occupancy Info** live to show current availability.
+- 🖼️ **Upload Hostel Images** to attract users.
+- 🔐 **Log Out Modal** for secure session management.
+
+---
+
+## 📱 App Preview
+
+### 🔍 Filter Screen
+![Filter Screen](./appImages/FilterScreen.jpeg)
+
+### 🧭 Drawer Navigation
+![Drawer](./appImages/Drawer.jpeg)
+
+### 📋 Login & Signup
+| Login | Signup |
+|---|---|
+| ![Login Screen](./appImages/LoginScreen.jpeg) | ![SignUp Screen](./appImages/SignUpScrenn.jpeg) |
+
+---
+
+### 🔐 LogOut Confirmation
+![LogOut Modal](./appImages/LogOutModal.jpeg)
+
+---
+
+## 🏘️ Hostel Owner Panel
+
+### 📥 Step-by-Step Hostel Registration
+| Step 1 | Step 2 |
+|---|---|
+| ![Step 1](./appImages/HostelOwnerForm-Step-1.jpeg) | ![Step 2](./appImages/HostelOwnerForm-Step-2.jpeg) |
+
+| Step 3 | Step 4 |
+|---|---|
+| ![Step 3](./appImages/HostelOwnerForm-Step-3.jpeg) | ![Step 4](./appImages/HostelOwnerForm-Step-4.jpeg) |
+
+### 🖼️ Manage Hostel Gallery
+![Hostel Images Screen](./appImages/HostelsImagesScreen.jpeg)
+
+### 🛠️ Update Hostel Details
+![Update Details](./appImages/UpdateHostelDetails.jpeg)
+
+### 👥 Update Occupancy
+![Occupancy](./appImages/UpdateHostelOccupancy.jpeg)
+
+---
+
+## 🔎 Additional Screens
+
+### 👤 Profile Screen
+![Profile](./appImages/ProfileScreen.jpeg)
+
+### 🔍 Search Results
+![Search](./appImages/SearchScreen.jpeg)
+
+---
+
+## 🛠️ Tech Stack
+
+- ⚛️ **React Native**
+- 🧾 **Redux (optional) / Context API**
+- 🧩 **React Navigation**
+- ☁️ **Node.js Backend (Express)**
+- 🗃️ **MongoDB for Storage**
+
+---
+
+## 🚀 Getting Started
 
 ```bash
-# using npm
-npm start
+# Clone the repo
+git clone https://github.com/yourusername/hostellocator.git
 
-# OR using Yarn
-yarn start
-```
+# Navigate to project directory
+cd hostellocator
 
-## Step 2: Start your Application
+# Install dependencies
+npm install
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+# Run on Android
+npx react-native run-android
 
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-Updated project information
+# Run on iOS (if on macOS)
+npx react-native run-ios
