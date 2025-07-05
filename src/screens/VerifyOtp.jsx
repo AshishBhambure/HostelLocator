@@ -5,6 +5,16 @@ import { sendOtp, signUp } from '../services/apiCaller';
 
 
 const OTPInput = ({ length = 6, onCodeFilled }) => {
+  const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      25,
+      50
+    );
+  };
+
   const [otp, setOtp] = useState(Array(length).fill(''));
   const inputRefs = useRef([]);
 
@@ -54,9 +64,9 @@ const OTPInput = ({ length = 6, onCodeFilled }) => {
 
 const VerifyOtp = () => {
     const navigation = useNavigation();
-    const showToastWithGravityAndOffset = () => {
+    const showToastWithGravityAndOffset = (message) => {
         ToastAndroid.showWithGravityAndOffset(
-          'Sign up successful ! ',
+          message,
           ToastAndroid.LONG,
           ToastAndroid.TOP,
           25,
@@ -88,15 +98,17 @@ const VerifyOtp = () => {
       <Text style={styles.title}>Verify OTP</Text>
       <OTPInput length={6} onCodeFilled={handleCodeFilled} />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.resendButton}
-         onPress={()=>sendOtp(formData.email)}
-        
-        >
-          <Text style={styles.resendText}>Resend OTP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
+      <TouchableOpacity  className=' bg-blue-600 px-2 py-2 rounded-md border border-black my-4 ' onPress={handleSubmit}>
           <Text style={styles.signUpText}>Sign Up</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity 
+         onPress={()=>sendOtp(formData.email,null,showToastWithGravityAndOffset)}
+        
+        >
+          <Text  className=' text-blue-400   cursor-pointer font-semibold text-sm'>Resend OTP</Text>
+        </TouchableOpacity>
+        
       </View>
     </View>
   );

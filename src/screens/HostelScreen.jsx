@@ -105,6 +105,7 @@ const HostelScreen = () => {
         }
         setLoading(false);  // Stop loader after attempting to get directions
     };
+    
  console.log(hostel.hostelOwner.image);
     return (
         <View>

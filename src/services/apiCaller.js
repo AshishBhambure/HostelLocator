@@ -16,20 +16,32 @@ export const test = async()=>{
    
 }
 
-export const sendOtp = async(data)=>{
+export const sendOtp = async(data,setLoading,showToastWithGravityAndOffset)=>{
     const SEND_OTP_API = BASE_URL + '/sendOtp';
     console.log(SEND_OTP_API);
     console.log("data at services" ,data);
 
     try{
+      if(setLoading)
+      setLoading(true);
       const result = await apiConnector('POST',SEND_OTP_API,{email:data},null,null);
       console.log("Data of SendOtp Api ",result.data);
+
+      return result.data;
 
     }
     catch(e)
     {
         console.log("Error in sendOtp frontend",e);
+        showToastWithGravityAndOffset(e?.response?.data.message);
+        console.log(e.response.data);
+        return e?.response?.data;
     }
+    finally{
+      if(setLoading)
+      setLoading(false);
+    }
+
 }
 
 export const signUp = async(data,showToastWithGravityAndOffset,navigation)=>{
@@ -40,7 +52,7 @@ export const signUp = async(data,showToastWithGravityAndOffset,navigation)=>{
    if(result.data){
     if(result.data.success)
     {
-        showToastWithGravityAndOffset();
+        showToastWithGravityAndOffset('Signup Done');
         navigation.navigate('Login');
         
     }
@@ -49,18 +61,20 @@ export const signUp = async(data,showToastWithGravityAndOffset,navigation)=>{
  }
  catch(e)
  {
-    console.log("Error While Sign Up ",e);
+  showToastWithGravityAndOffset(e?.response?.data?.message);
+    console.log("Error While Sign Up ",e?.response?.data?.message);
  }
 }
 
-export const login = async(data,showToastWithGravityAndOffset,storeData,navigation)=>{
+export const login = async(data,showToastWithGravityAndOffset,storeData,navigation,setLoading)=>{
 
     const LOGIN_API = BASE_URL + '/login';
     try{
+      setLoading(true);
        const result = await apiConnector('POST',LOGIN_API,data);
-      console.log('result of login ', result);
+      console.log('result of login  in api Caller ', result);
        if(result.data.success){
-        showToastWithGravityAndOffset();
+        showToastWithGravityAndOffset('Login successfull !! ');
         await clearAsyncStorage();
         await storeData('token',result.data.token);
         await storeData('user',result.data.user);
@@ -75,9 +89,13 @@ export const login = async(data,showToastWithGravityAndOffset,storeData,navigati
     }
     catch(e)
     {
-        console.log("Error In logIn FrontEnd" ,e );
+      
+        console.log("Error In logIn FrontEnd" ,e.response.data );
+        // showToastWithGravityAndOffset('Error in Login check credentials')
+        showToastWithGravityAndOffset(e?.response?.data?.message);
 
     }
+    setLoading(false);
 }
 
 export const uploadImage = async (formData) => {
@@ -288,7 +306,7 @@ export const getProfileData = async(userId)=>{
   }
 }
 
-export const updateProfileApiCaller = async(formData)=>{
+export const updateProfileApiCaller = async(formData,setImageLoading)=>{
   const api = BASE_URL + '/updateUserProfile';
   try{
     const response = await fetch(api, {
@@ -299,13 +317,17 @@ export const updateProfileApiCaller = async(formData)=>{
       },
     });
 
+    setImageLoading(true);
+
     
     const data = await response.json();
     console.log("data" ,data);
+    setImageLoading(false);
     return data;
 
   }
   catch(e){
+    setImageLoading(false);
     console.log("Error while updating profile in FE" , e);
   }
 }

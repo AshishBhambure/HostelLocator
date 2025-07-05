@@ -1,17 +1,21 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '../services/apiCaller';
 import Toast from 'react-native-toast-message';
 import { getData } from '../utils/getAndSetData';
+import { ActivityIndicator } from 'react-native';
+import { EyeIcon, EyeSlashIcon } from 'react-native-heroicons/outline';
+import { CommonActions } from '@react-navigation/native';
 
 const Login = () => {
-
-    const showToastWithGravityAndOffset = () => {
+    const [loading,setLoading] = useState(false);
+    const [showPassword,setShowPassword] = useState(false);
+    const showToastWithGravityAndOffset = (message) => {
         ToastAndroid.showWithGravityAndOffset(
-          'Login  successfull !! ',
+          message,
           ToastAndroid.LONG,
           ToastAndroid.TOP,
           25,
@@ -25,13 +29,23 @@ const Login = () => {
 
     const onSubmit = async(data)=>{
         console.log("Login Form Data ", data );
-        const result = await login(data,showToastWithGravityAndOffset,storeData,navigation);
+        const result = await login(data,showToastWithGravityAndOffset,storeData,navigation,setLoading);
+
+        console.log("Result of login " , result);
           if(result){
             Toast.show({
                 text1:"Login successfull"
             })
+             navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: 'Home' }],
+                })
+              );
+
             navigation.navigate('Home');
           }
+
         // console.log("Data is :: ",result);
 
     }
@@ -115,7 +129,11 @@ const Login = () => {
                         {errors.email && (
               <Text style={{ color: 'red' }}>{errors.email.message}</Text>
             )}
+                      <View
+                       className='relative'
+                       >
 
+                   
                         <TextInput
                            {...register('password',{
                             required:'Password is required'
@@ -125,21 +143,54 @@ const Login = () => {
                             placeholder='Password'
                             placeholderTextColor={'gray'}
                             className='bg-[#F1F4FF] text-black pl-2 my-2 border border-blue-800 rounded-md'
-                            secureTextEntry
+                            secureTextEntry={!showPassword}
                         />
+                        <TouchableOpacity
+                        onPress={()=>setShowPassword((prev)=>!prev)}
+                         className='  absolute  top-5  right-2 '
+                        >
+                        {
+                            showPassword=== true ? (<EyeIcon
+                       
+                                color={'gray'}
+                                size={24}
+                               />) :(<EyeSlashIcon
+                       
+                                color={'gray'}
+                                size={24}
+                               />)
+                        }
+                         
+                        </TouchableOpacity>
+                       
+                        </View>
                         {errors.password && (
               <Text style={{ color: 'red' }}>{errors.password.message}</Text>
             )}
-                        <TouchableOpacity className='text-blue-800 font-bold self-end py-2'>
+            
+                        {/*<TouchableOpacity className='text-blue-800 font-bold self-end py-2'>
                             <Text className='self-end text-blue-800 font-bold py-2'>
                                 Forgot your Password?
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
 
                         <TouchableOpacity
                          onPress={handleSubmit(onSubmit)}
                         className='w-full bg-blue-600 py-4 rounded-md'>
-                            <Text className='self-center text-lg font-bold text-white'>Sign In</Text>
+                            {
+                                loading && (
+                                    <ActivityIndicator
+                                     size={24}
+                                     color={'white'}
+                                    />
+                                )
+                            }
+                            {
+                                !loading &&(
+                                    <Text className='self-center text-lg font-bold text-white'>Sign In</Text>
+                                )
+                            }
+                            
                         </TouchableOpacity>
                     </View>
 

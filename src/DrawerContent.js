@@ -7,7 +7,7 @@ import { SvgUri } from 'react-native-svg'; // Import for rendering SVGs
 import { clearAsyncStorage, getData } from './utils/getAndSetData';
 import { setBasicInfo, setHostelInfo, setLocationInSlice, setPictures, setUpdate } from './slices/hostelFormSlice';
 import { useDispatch } from 'react-redux';
-
+import { CommonActions } from '@react-navigation/native';
 function DrawerContent(props) {
   const [user, setUser] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false); // State for controlling modal visibility
@@ -37,6 +37,12 @@ function DrawerContent(props) {
     await clearAsyncStorage(); // Clear AsyncStorage
     const data = await getData('token'); // Fetch token after logout
     console.log("Data after logOut", data);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      })
+    );
     navigation.navigate('Login'); // Navigate to Login screen
   };
 

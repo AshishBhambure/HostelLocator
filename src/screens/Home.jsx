@@ -64,7 +64,7 @@ export default function Home() {
       });
 
       console.log("Filtered Hostels :: ",filteredHostels)
-    
+      setModalVisible(false);
       // Step 3: Set the filtered and sorted hostels
       setHostels(filteredHostels);
     };
@@ -76,7 +76,7 @@ export default function Home() {
       setHWater(false);
       setLowToHigh(true);
       setHostels(data);
-
+      setModalVisible(false);
     } 
     useEffect(()=>{
       const fetchData = async () => {

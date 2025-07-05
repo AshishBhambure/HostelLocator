@@ -19,6 +19,7 @@ const Profile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // For text input modal
   const [showUpload, setShowUpload] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [imageLoading,setImageLoading] = useState(false);
 
   // Fetch user data on component mount
   const fetchUser = async () => {
@@ -103,9 +104,10 @@ useFocusEffect(
     }
 
     formData.append('id', user._id);
-
-    const res = await updateProfileApiCaller(formData);
+    setImageLoading(true);
+    const res = await updateProfileApiCaller(formData,setImageLoading);
     console.log('Response ', res);
+    setImageLoading(false);
 
     if (res?.success ) {
       if(showUpload){
@@ -164,7 +166,19 @@ useFocusEffect(
             onPress={apiCall}
             className="py-1 px-2 rounded-md bg-blue-400 mt-6"
           >
-            <Text className="text-white">Upload</Text>
+                  {
+                    imageLoading &&(
+                      <ActivityIndicator
+                      size={24}
+                      color={'white'}
+                     />
+                    )
+                   
+                  }
+                  {
+                    !imageLoading && (<Text className="text-white">Upload</Text>)
+                  }
+            
           </TouchableOpacity>
         )}
 
@@ -240,7 +254,13 @@ useFocusEffect(
                   className="bg-blue-500 p-2 rounded"
                   onPress={handleContactNumberUpdate}
                 >
-                  <Text className="text-white">Update</Text>
+                 
+
+                      <Text className="text-white">Update</Text>
+                    
+                   
+                  
+                  
                 </TouchableOpacity>
               </View>
             </View>
